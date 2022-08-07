@@ -1,7 +1,6 @@
 pub mod instainstaling {
     use ureq::serde_json::{from_str, Value};
     use ureq::Agent;
-    use crate::word::Word;
 
     pub struct Insta {
         pub words_list: Vec<Word>,
@@ -138,7 +137,7 @@ pub mod instainstaling {
         pub answer: String 
     }
 
-    pub impl Word {
+    impl Word {
         pub fn new(id: String, answer: String) -> Self {
             Self {id, answer}
         }
