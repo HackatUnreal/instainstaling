@@ -99,14 +99,19 @@ impl InstaBuilder {
         return self;
     }
 
-    pub fn start_session(self) -> Self {
+    pub fn start_session(self) -> Result<Self, &'static str> {
         // create the params
         let sess_params = [("child_id", self.child_id.as_str())];
 
-        self.agent.post("https://instaling.pl/ling2/server/actions/init_session.php")
-            .send_form(&sess_params).expect("error; probably zly email czy haslo");
+        let test = self.agent.post("https://instaling.pl/ling2/server/actions/init_session.php")
+            .send_form(&sess_params);
 
-        return self;
+        match test {
+            Ok(_) => (),
+            Err(_) => return Err("zly email/haslo"),
+        }
+
+        return Ok(self);
     }
 
     
