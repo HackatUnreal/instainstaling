@@ -104,7 +104,7 @@ impl InstaBuilder {
         let sess_params = [("child_id", self.child_id.as_str())];
 
         self.agent.post("https://instaling.pl/ling2/server/actions/init_session.php")
-            .send_form(&sess_params).unwrap();
+            .send_form(&sess_params).expect("error; probably zly email czy haslo");
 
         return self;
     }
