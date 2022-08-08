@@ -1,3 +1,5 @@
+use std::fmt;
+
 use ureq::serde_json::{from_str, Value};
 use ureq::Agent;
 
@@ -75,6 +77,15 @@ impl Insta {
 pub enum InstaError {
     WrongCreds
 }
+
+
+impl fmt::Debug for InstaError{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "error lol")
+    }
+}
+
+
 
 #[derive(PartialEq)]
 pub enum AnswerResult {
