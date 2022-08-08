@@ -72,6 +72,7 @@ impl Insta {
 
 }
 
+#[derive(PartialEq)]
 pub enum AnswerResult {
     Good,
     Bad,
