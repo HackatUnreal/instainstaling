@@ -47,7 +47,13 @@ impl Insta {
             .send_form(&check_form).unwrap();
 
         let check_response: Value = from_str(&check_request.into_string().unwrap()).unwrap();
-        let check_word = check_response["word"].as_str().unwrap();
+        let check_word = check_response["word"].as_str();
+
+        let check_word = match check_word {
+            Some(_) => check_word.unwrap(),
+            None => return false,
+        };
+
         let answer = check_word == word.answer;
 
         if answer {
