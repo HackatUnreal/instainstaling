@@ -40,7 +40,7 @@ impl Insta {
         word.parse(answer_url, &self.words_list);
     }
 
-    pub fn check_answer(&mut self, word: &Word) -> Value {
+    pub fn check_answer(&mut self, word: &Word) -> &str {
         let check_form = [("child_id", self.child_id.as_str()), ("word_id", word.id.as_str()), ("answer", word.answer.as_str()), ("version", "C65E24B29F60B1221EC23D979C9707D2")];
 
         let check_request = self.agent.post("https://instaling.pl/ling2/server/actions/save_answer.php")
@@ -51,21 +51,22 @@ impl Insta {
 
         if check_word.is_none() {
             println!("{:?}", &check_response);
+            return "err";
         }
 
         let check_word = check_word.unwrap();
         let answer = check_word == word.answer;
 
-        println!("{}", answer);
 
         if answer {
+            return "ok";
         } else {
             let mut word_copy = word.clone();
             word_copy.answer = check_word.to_string();
             self.words_list.push(word_copy);
+            
+            return "bad";
         }
-
-        return check_response.clone();
     }
 
 
