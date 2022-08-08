@@ -47,7 +47,7 @@ impl Insta {
             .send_form(&check_form).unwrap();
 
         let check_response: Value = from_str(&check_request.into_string().unwrap()).unwrap();
-        let check_word = check_response["word"].as_str();
+        let check_word = check_response["answershow"].as_str();
 
         if check_word.is_none() {
             println!("{:?}", check_response);
