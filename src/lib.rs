@@ -56,6 +56,8 @@ impl Insta {
         let check_word = check_word.unwrap();
         let answer = check_word == word.answer;
 
+        println!("{}", answer);
+
         if answer {
         } else {
             let mut word_copy = word.clone();
