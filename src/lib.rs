@@ -71,6 +71,10 @@ impl Insta {
 
 
 }
+#[derive(PartialEq)]
+pub enum InstaError {
+    WrongCreds
+}
 
 #[derive(PartialEq)]
 pub enum AnswerResult {
@@ -113,29 +117,28 @@ impl InstaBuilder {
         return self;
     }
 
-    pub fn start_session(self) -> Result<Self, &'static str> {
+    pub fn start_session(self) -> Self {
         // create the params
         let sess_params = [("child_id", self.child_id.as_str())];
 
-        let test = self.agent.post("https://instaling.pl/ling2/server/actions/init_session.php")
-            .send_form(&sess_params);
+        self.agent.post("https://instaling.pl/ling2/server/actions/init_session.php")
+            .send_form(&sess_params).unwrap();
 
-        match test {
-            Ok(_) => (),
-            Err(_) => return Err("zly email/haslo"),
-        }
-
-        return Ok(self);
+        return self;
     }
 
-    
-    pub fn get_child_id(mut self) -> Self {
+   
+    pub fn get_child_id(mut self) -> Result<Self, InstaError> {
         let disp_request = self.agent.get("https://instaling.pl/learning/dispatcher.php?from=")
             .send_string("").unwrap();
 
+        if disp_request.get_url().contains("expired") {
+            return Err(InstaError::WrongCreds);
+        }
+
 
         self.child_id = disp_request.get_url().split_at(59).1.to_string();
-        self
+        Ok(self)
     }
 
     pub fn build(self) -> Insta {
